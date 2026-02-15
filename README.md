@@ -107,55 +107,23 @@ See the [Ash Integration guide](guides/ash-integration.md) for full documentatio
 
 ## Why Plurality?
 
-### Accuracy
+Every inflection library gets the easy words right. The difference shows on the
+long tail — medical terms, Latin borrowings, irregular compounds, and
+uncountable nouns that hand-rolled inflection or simpler libraries silently
+mangle.
 
-Handles tricky business and technical English that other libraries miss:
+Plurality exists to close that gap. It is verified against two independent
+linguistic corpora — **80,191 noun pairs** tested in both directions — so
+words like "fulfilment", "chassis", "criteria", "schema", and "merchandise"
+just work. No fallback hacks, no silent failures.
 
-| Word | Plurality |
-|------|-----------|
-| merchandise | merchandise (uncountable) |
-| schema | schemas (modern English) |
-| appendix | appendices |
-| chassis | chassis (uncountable) |
-| taxes | tax (singularize) |
+- **100% accuracy** on AGID (32,625 pairs) and NIH SPECIALIST Lexicon (47,566 pairs)
+- **~6M ops/sec** single word, ~4.3M words/sec batch — zero regex, all compile-time data
+- **Two modes** — modern English by default, `classical: true` for Latin/Greek forms
+- **2,325 tests** covering corpus validation, classical mode, business domain, compounds, and edge cases
 
-### Performance
-
-Zero regex at runtime. Suffix rules use last-byte dispatch via BEAM `select_val`
-jump tables.
-
-| Approach | ips | vs Regex |
-|----------|-----|----------|
-| Regex (typical) | 3.6K | 1x |
-| **Last-byte dispatch** | **173K** | **48x** |
-
-### Architecture
-
-Three-tier resolution (Conway 1998, same as Rails and pluralize.js):
-
-```
-1. Uncountables (MapSet)  =>  word unchanged     (sheep, software, news)
-2. Irregulars (Map)       =>  direct lookup       (child => children)
-3. Suffix rules           =>  last-byte dispatch  (category => categories)
-```
-
-All data compiled into module attributes at build time. Zero runtime file I/O.
-
-See the [Methodology guide](guides/methodology.md) for detailed documentation of
-data sources, modern vs. classical decisions, corpus compliance, and suffix rule
-design.
-
-## Test suite
-
-```
-44 doctests, 2,325 tests, 0 failures
-```
-
-Validates **80,191 noun pairs** from two independent corpora in both directions:
-
-- **AGID** -- 32,625 pairs (Automatically Generated Inflection Database)
-- **NIH SPECIALIST Lexicon** -- 47,566 pairs (National Library of Medicine, 2025)
-- Plus: irregular parity, classical mode, business domain, compound nouns, Ash integration, edge cases
+See [Methodology](guides/methodology.md) for data sources, design decisions,
+and corpus compliance. See [Performance](guides/performance.md) for benchmarks.
 
 ## API
 
