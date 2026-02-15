@@ -14,7 +14,7 @@ defmodule Plurality.MixProject do
       package: package(),
       name: "Plurality",
       description:
-        "Fast, zero-regex English inflection for Elixir. Pluralize, singularize, and detect noun forms with compile-time data and last-byte dispatch.",
+        "Fast English plural and singular noun inflection for Elixir. Convert plural to singular, singular to plural, and detect noun forms. Zero-regex, compile-time data, O(1) dispatch.",
       source_url: @source_url,
       docs: docs()
     ]
