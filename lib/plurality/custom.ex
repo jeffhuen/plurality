@@ -100,9 +100,13 @@ defmodule Plurality.Custom do
     uncountables = Keyword.get(opts, :uncountables, [])
 
     quote do
-      @custom_irregulars_s2p Map.new(unquote(irregulars))
-      @custom_irregulars_p2s Map.new(unquote(irregulars), fn {s, p} -> {p, s} end)
-      @custom_uncountables MapSet.new(unquote(uncountables))
+      @custom_irregulars_s2p Map.new(unquote(irregulars), fn {s, p} ->
+                               {String.downcase(s), String.downcase(p)}
+                             end)
+      @custom_irregulars_p2s Map.new(unquote(irregulars), fn {s, p} ->
+                               {String.downcase(p), String.downcase(s)}
+                             end)
+      @custom_uncountables MapSet.new(unquote(uncountables), &String.downcase/1)
 
       @doc """
       Converts a word to its plural form, checking custom overrides first.

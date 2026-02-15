@@ -1,6 +1,6 @@
 # Plurality
 
-Fast, zero-regex English inflection for Elixir. Pluralize, singularize, and detect noun forms with compile-time data and last-byte dispatch.
+Fast, zero-regex English noun inflection for Elixir. Pluralize, singularize, and detect noun forms with compile-time data and last-byte dispatch. Operates on nouns only; other parts of speech are not supported.
 
 ## Installation
 
@@ -9,7 +9,7 @@ Add `plurality` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:plurality, "~> 0.2.0"}
+    {:plurality, "~> 0.2.1"}
   ]
 end
 ```

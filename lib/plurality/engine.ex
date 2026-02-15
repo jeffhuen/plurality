@@ -84,6 +84,10 @@ defmodule Plurality.Engine do
 
   @priv_dir :code.priv_dir(:plurality) |> to_string()
 
+  @external_resource Path.expand("../../priv/data/classical_overrides.tsv", __DIR__)
+  @external_resource Path.expand("../../priv/data/irregulars.tsv", __DIR__)
+  @external_resource Path.expand("../../priv/data/uncountables.txt", __DIR__)
+
   # Load classical overrides from priv/data/classical_overrides.tsv
   # Format: singular<TAB>modern_plural<TAB>classical_plural
   # Only contains words where the default is modern but a classical form exists.

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-02-14
+
+### Fixed
+
+- `Plurality.Custom` now matches overrides case-insensitively, consistent with
+  the core engine. Mixed-case entries like `{"Regex", "Regexen"}` previously
+  failed to match at runtime.
+- Identity irregulars (`cat-o'-nine-tails`, `faux-pas`, `helium`, `quartz`,
+  `sleep`) are now correctly treated as uncountable. Previously,
+  `singularize("faux-pas")` returned `"faux-pa"`.
+- Data files (`irregulars.tsv`, `uncountables.txt`, `classical_overrides.tsv`)
+  are now registered as `@external_resource`, so editing them triggers
+  recompilation without requiring `mix clean`.
+
+### Changed
+
+- Removed non-noun pronoun mappings from the irregulars corpus. Entries like
+  `her`/`their`, `him`/`them`, and `he`/`them` produced nonsensical
+  cross-mappings (e.g., `singularize("their")` returned `"her"`). Plurality
+  operates on English nouns; other parts of speech are not in scope.
+
 ## [0.2.0] - 2026-02-14
 
 ### Added

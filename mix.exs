@@ -1,7 +1,7 @@
 defmodule Plurality.MixProject do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.2.1"
   @source_url "https://github.com/jeffhuen/plurality"
 
   def project do
@@ -39,7 +39,10 @@ defmodule Plurality.MixProject do
   defp package do
     [
       licenses: ["MIT"],
-      links: %{"GitHub" => @source_url},
+      links: %{
+        "GitHub" => @source_url,
+        "Changelog" => "#{@source_url}/blob/main/CHANGELOG.md"
+      },
       files: ~w[
         lib
         priv/data

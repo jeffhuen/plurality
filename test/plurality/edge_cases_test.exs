@@ -75,6 +75,26 @@ defmodule Plurality.EdgeCasesTest do
                "singularize(#{word}) should return #{word}"
       end
     end
+
+    test "identity irregulars are unchanged by singularize" do
+      for word <- ["cat-o'-nine-tails", "faux-pas", "helium", "quartz", "sleep"] do
+        assert Plurality.singularize(word) == word,
+               "singularize(#{word}) should return #{word}"
+
+        assert Plurality.pluralize(word) == word,
+               "pluralize(#{word}) should return #{word}"
+      end
+    end
+  end
+
+  describe "pronouns are not inflected as nouns" do
+    test "singularize does not map plural pronouns to unrelated singular pronouns" do
+      assert Plurality.singularize("their") != "her"
+      assert Plurality.singularize("them") != "he"
+      assert Plurality.singularize("they") != "it"
+      assert Plurality.singularize("they") != "she"
+      assert Plurality.singularize("themselves") != "herself"
+    end
   end
 
   describe "style preservation edge cases" do

@@ -2,6 +2,9 @@ defmodule Plurality do
   @moduledoc """
   Fast, zero-regex English noun inflection for Elixir.
 
+  Operates on English nouns only. Other parts of speech (pronouns, adjectives,
+  adverbs, etc.) are not supported and will produce undefined results.
+
   Plurality provides 99%+ accuracy on business and technical English,
   using compile-time binary pattern matching instead of runtime regex.
 

@@ -351,6 +351,26 @@ defmodule PluralityTest do
       assert TestCustom.plural?("kubernetes") == true
       assert TestCustom.singular?("kubernetes") == true
     end
+
+    defmodule TestCustomMixedCase do
+      use Plurality.Custom,
+        irregulars: [{"Regex", "Regexen"}],
+        uncountables: ["Kubernetes"]
+    end
+
+    test "mixed-case custom irregulars match case-insensitively" do
+      assert TestCustomMixedCase.pluralize("Regex") == "Regexen"
+      assert TestCustomMixedCase.pluralize("regex") == "regexen"
+      assert TestCustomMixedCase.pluralize("REGEX") == "REGEXEN"
+      assert TestCustomMixedCase.singularize("Regexen") == "Regex"
+      assert TestCustomMixedCase.singularize("regexen") == "regex"
+    end
+
+    test "mixed-case custom uncountables match case-insensitively" do
+      assert TestCustomMixedCase.pluralize("Kubernetes") == "Kubernetes"
+      assert TestCustomMixedCase.pluralize("kubernetes") == "kubernetes"
+      assert TestCustomMixedCase.pluralize("KUBERNETES") == "KUBERNETES"
+    end
   end
 
   # ── Compound nouns ──────────────────────────────────────────────

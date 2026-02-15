@@ -152,6 +152,7 @@ carp
 cash
 catering
 catsup
+cat-o'-nine-tails
 cattle
 celeriac
 celsius
@@ -336,6 +337,7 @@ fahrenheit
 fairness
 fame
 farming
+faux-pas
 fast food
 fedelini
 feedback
@@ -418,6 +420,7 @@ heat
 heating
 heaven
 height
+helium
 hell
 help
 heritage
@@ -705,6 +708,7 @@ pyridine
 quid
 quiet
 quinoa
+quartz
 rabies
 racism
 radiation
@@ -808,6 +812,7 @@ skiing
 slang
 slaughter
 slavery
+sleep
 smog
 smoke
 smoking
@@ -1014,6 +1019,7 @@ yeast
 yoga
 you
 young
+your
 yours
 youth
 zebrafish
