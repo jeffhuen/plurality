@@ -62,8 +62,6 @@ defmodule Plurality.ParityTest do
   @singularize_overrides %{
     # taxes → tax (not taxis — "taxis" is the plural of "taxi", a different word)
     "taxes" => "tax",
-    # axes: both "axis" and "axe" pluralize to "axes". Genuine ambiguity.
-    "axes" => :skip,
     # annexe vs annex — both valid singulars of annexes
     "annexes" => :skip,
     # Noe is a proper name, no→noes is handled by suffix rules

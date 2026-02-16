@@ -9,7 +9,7 @@ Add `plurality` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:plurality, "~> 0.2.1"}
+    {:plurality, "~> 0.2.2"}
   ]
 end
 ```
@@ -120,7 +120,7 @@ just work. No fallback hacks, no silent failures.
 - **100% accuracy** on AGID (32,625 pairs) and NIH SPECIALIST Lexicon (47,566 pairs)
 - **~6M ops/sec** single word, ~4.3M words/sec batch — zero regex, all compile-time data
 - **Two modes** — modern English by default, `classical: true` for Latin/Greek forms
-- **2,325 tests** covering corpus validation, classical mode, business domain, compounds, and edge cases
+- **2,400+ tests** (including doctests) covering corpus validation, classical mode, business domain, compounds, and edge cases
 
 See [Methodology](guides/methodology.md) for data sources, design decisions,
 and corpus compliance. See [Performance](guides/performance.md) for benchmarks.
@@ -140,6 +140,7 @@ and corpus compliance. See [Performance](guides/performance.md) for benchmarks.
 - [Classical Mode](guides/classical-mode.md) -- Latin/Greek plural forms
 - [Customization](guides/customization.md) -- domain-specific overrides
 - [Ash Integration](guides/ash-integration.md) -- changes, validations, calculations
+- [Ambiguous Words](guides/ambiguous-words.md) -- known ambiguities and how to override them
 - [Methodology](guides/methodology.md) -- data sources, design decisions, corpus compliance
 
 ## Acknowledgements

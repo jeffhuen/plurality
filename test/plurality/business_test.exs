@@ -152,8 +152,8 @@ defmodule Plurality.BusinessTest do
       assert Plurality.pluralize("polyhedron") == "polyhedra"
       assert Plurality.pluralize("corrigendum") == "corrigenda"
       assert Plurality.pluralize("alumnus") == "alumni"
-      assert Plurality.pluralize("fungus") == "fungi"
-      assert Plurality.pluralize("cactus") == "cacti"
+      assert Plurality.pluralize("fungus") == "funguses"
+      assert Plurality.pluralize("cactus") == "cactuses"
       assert Plurality.pluralize("genus") == "genera"
     end
   end

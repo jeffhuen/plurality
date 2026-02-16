@@ -130,6 +130,7 @@ bream
 breath
 breeches
 bribery
+briefs
 britches
 broadband
 broccoli
@@ -380,7 +381,6 @@ geography
 geology
 gigantism
 glamour
-glass
 global warming
 globalization
 glory
@@ -438,6 +438,7 @@ honey
 horror
 hospitality
 housework
+hovercraft
 housing
 humanity
 humility
@@ -516,6 +517,7 @@ laziness
 leadership
 learning
 leather
+leggings
 legislation
 leisure
 lemonade
@@ -633,6 +635,7 @@ osmosis
 ought
 out
 over
+overalls
 overtime
 ownership
 oxygen
@@ -791,6 +794,7 @@ shears
 sheep
 sheers
 shopping
+shorts
 should
 shrimp
 shyness
@@ -943,6 +947,7 @@ trout
 trust
 tuition
 tuna
+tweezers
 twins
 uncertainty
 under

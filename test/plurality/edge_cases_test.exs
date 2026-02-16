@@ -125,6 +125,164 @@ defmodule Plurality.EdgeCasesTest do
     end
   end
 
+  # ══════════════════════════════════════════════════════════════════
+  # Bug-fix regression tests
+  # ══════════════════════════════════════════════════════════════════
+
+  describe "fix #1: trout is uncountable" do
+    test "pluralize returns trout unchanged" do
+      assert Plurality.pluralize("trout") == "trout"
+    end
+
+    test "singularize returns trout unchanged" do
+      assert Plurality.singularize("trout") == "trout"
+    end
+  end
+
+  describe "fix #2: modern/classical split" do
+    test "modern defaults for previously-classical words" do
+      pairs = [
+        {"cactus", "cactuses"},
+        {"chateau", "chateaus"},
+        {"cherub", "cherubs"},
+        {"curriculum", "curriculums"},
+        {"fungus", "funguses"},
+        {"octopus", "octopuses"},
+        {"plateau", "plateaus"},
+        {"seraph", "seraphs"},
+        {"syllabus", "syllabuses"},
+        {"tableau", "tableaus"}
+      ]
+
+      for {singular, modern} <- pairs do
+        assert Plurality.pluralize(singular) == modern,
+               "pluralize(#{singular}) should be #{modern}, got #{Plurality.pluralize(singular)}"
+      end
+    end
+
+    test "classical mode returns classical plurals" do
+      pairs = [
+        {"cactus", "cacti"},
+        {"chateau", "chateaux"},
+        {"cherub", "cherubim"},
+        {"curriculum", "curricula"},
+        {"fungus", "fungi"},
+        {"octopus", "octopi"},
+        {"plateau", "plateaux"},
+        {"seraph", "seraphim"},
+        {"syllabus", "syllabi"},
+        {"tableau", "tableaux"}
+      ]
+
+      for {singular, classical} <- pairs do
+        assert Plurality.pluralize(singular, classical: true) == classical,
+               "pluralize(#{singular}, classical: true) should be #{classical}, got #{Plurality.pluralize(singular, classical: true)}"
+      end
+    end
+
+    test "singularize handles both modern and classical forms" do
+      assert Plurality.singularize("octopuses") == "octopus"
+      assert Plurality.singularize("octopi") == "octopus"
+      assert Plurality.singularize("cherubs") == "cherub"
+      assert Plurality.singularize("cherubim") == "cherub"
+      assert Plurality.singularize("chateaus") == "chateau"
+      assert Plurality.singularize("chateaux") == "chateau"
+    end
+  end
+
+  describe "fix #3: head of state compound" do
+    test "pluralize head of state" do
+      assert Plurality.pluralize("head of state") == "heads of state"
+    end
+
+    test "singularize heads of state" do
+      assert Plurality.singularize("heads of state") == "head of state"
+    end
+  end
+
+  describe "fix #4: -oes irregulars" do
+    test "pluralize -o words to -oes" do
+      pairs = [
+        {"mango", "mangoes"},
+        {"veto", "vetoes"},
+        {"domino", "dominoes"},
+        {"embargo", "embargoes"},
+        {"mosquito", "mosquitoes"}
+      ]
+
+      for {singular, plural} <- pairs do
+        assert Plurality.pluralize(singular) == plural,
+               "pluralize(#{singular}) should be #{plural}, got #{Plurality.pluralize(singular)}"
+      end
+    end
+
+    test "singularize -oes words" do
+      assert Plurality.singularize("mangoes") == "mango"
+      assert Plurality.singularize("vetoes") == "veto"
+    end
+  end
+
+  describe "fix #7: compound irregulars" do
+    test "pluralize compound nouns" do
+      assert Plurality.pluralize("mother-in-law") == "mothers-in-law"
+      assert Plurality.pluralize("attorney general") == "attorneys general"
+      assert Plurality.pluralize("court-martial") == "courts-martial"
+      assert Plurality.pluralize("sergeant major") == "sergeants major"
+    end
+
+    test "singularize compound nouns" do
+      assert Plurality.singularize("mothers-in-law") == "mother-in-law"
+      assert Plurality.singularize("attorneys general") == "attorney general"
+    end
+  end
+
+  describe "fix #11a: glass is countable" do
+    test "pluralize glass to glasses" do
+      assert Plurality.pluralize("glass") == "glasses"
+    end
+
+    test "singularize glasses to glass" do
+      assert Plurality.singularize("glasses") == "glass"
+    end
+  end
+
+  describe "fix #12: axis is canonical singular of axes" do
+    test "singularize axes to axis" do
+      assert Plurality.singularize("axes") == "axis"
+    end
+
+    test "pluralize axe to axes" do
+      assert Plurality.pluralize("axe") == "axes"
+    end
+  end
+
+  describe "fix #14: hovercraft is uncountable" do
+    test "pluralize hovercraft unchanged" do
+      assert Plurality.pluralize("hovercraft") == "hovercraft"
+    end
+
+    test "singularize hovercraft unchanged" do
+      assert Plurality.singularize("hovercraft") == "hovercraft"
+    end
+  end
+
+  describe "fix #15: pluralia tantum are uncountable" do
+    test "shorts stays unchanged" do
+      assert Plurality.pluralize("shorts") == "shorts"
+      assert Plurality.singularize("shorts") == "shorts"
+    end
+
+    test "tweezers stays unchanged" do
+      assert Plurality.pluralize("tweezers") == "tweezers"
+      assert Plurality.singularize("tweezers") == "tweezers"
+    end
+
+    test "briefs stays unchanged" do
+      assert Plurality.pluralize("briefs") == "briefs"
+      assert Plurality.singularize("briefs") == "briefs"
+    end
+  end
+
   describe "inflect/2" do
     test "negative counts return plural" do
       assert Plurality.inflect("cat", -1) == "cats"

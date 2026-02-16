@@ -1,7 +1,7 @@
 defmodule Plurality.MixProject do
   use Mix.Project
 
-  @version "0.2.1"
+  @version "0.2.2"
   @source_url "https://github.com/jeffhuen/plurality"
 
   def project do
@@ -14,7 +14,8 @@ defmodule Plurality.MixProject do
       package: package(),
       name: "Plurality",
       description:
-        "Fast English plural and singular noun inflection for Elixir. Convert plural to singular, singular to plural, and detect noun forms. Zero-regex, compile-time data, O(1) dispatch.",
+        "Ultra fast English pluralize and singularize noun inflection for Elixir. Convert plural to singular, singular to plural, and detect noun forms. Zero-regex, compile-time data, O(1) dispatch. Classical English mode available.",
+      authors: ["Jeff Huen"],
       source_url: @source_url,
       docs: docs()
     ]
@@ -65,6 +66,7 @@ defmodule Plurality.MixProject do
         "guides/ash-integration.md",
         "guides/performance.md",
         "guides/methodology.md",
+        "guides/ambiguous-words.md",
         "CHANGELOG.md"
       ],
       groups_for_extras: [

@@ -201,7 +201,6 @@ defmodule Plurality.ClassicalTest do
 
     test "already-classical defaults stay classical" do
       # These words are already in irregulars with classical defaults
-      assert Plurality.pluralize("cactus") == "cacti"
       assert Plurality.pluralize("datum") == "data"
       assert Plurality.pluralize("criterion") == "criteria"
       assert Plurality.pluralize("phenomenon") == "phenomena"

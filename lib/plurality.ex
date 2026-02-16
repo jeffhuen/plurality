@@ -229,7 +229,7 @@ defmodule Plurality do
       "traumata"
 
       iex> Plurality.pluralize("cactus")
-      "cacti"
+      "cactuses"
 
       iex> Plurality.pluralize("leaf", classical: true)
       "leaves"

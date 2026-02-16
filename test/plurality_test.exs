@@ -399,7 +399,7 @@ defmodule PluralityTest do
     end
 
     test "known multi-word irregulars take priority over splitting" do
-      assert Plurality.pluralize("head of state") == "heads of states"
+      assert Plurality.pluralize("head of state") == "heads of state"
       assert Plurality.pluralize("son of a bitch") == "sons of bitches"
       assert Plurality.pluralize("coup d'etat") == "coups d'etat"
     end

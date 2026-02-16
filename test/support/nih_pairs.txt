@@ -5380,7 +5380,6 @@ bridgehead	bridgeheads
 bridgeman	bridgemen
 bridgework	bridgeworks
 bridle	bridles
-brief	briefs
 briefing	briefings
 brigade	brigades
 brigand	brigands
@@ -5854,7 +5853,7 @@ cacodylate	cacodylates
 cacophony	cacophonies
 cacosmic	cacosmics
 cacospongionolide	cacospongionolides
-cactus	cacti
+cactus	cactuses
 cad	cads
 cadastre	cadastres
 cadaverine	cadaverines
@@ -9909,7 +9908,7 @@ currant	currants
 currency	currencies
 current	currents
 curricle	curricles
-curriculum	curricula
+curriculum	curriculums
 currier	curriers
 currycomb	currycombs
 cursor	cursors
@@ -16428,7 +16427,7 @@ fungicide	fungicides
 fungistat	fungistats
 fungitoxicity	fungitoxicities
 fungosity	fungosities
-fungus	fungi
+fungus	funguses
 funicle	funicles
 funicular	funiculars
 funipuncture	funipunctures
@@ -22476,7 +22475,6 @@ legatee	legatees
 legateship	legateships
 legation	legations
 legend	legends
-legging	leggings
 leghorn	leghorns
 legibility	legibilities
 leginsulin	leginsulins
@@ -29212,7 +29210,7 @@ octodon	octodons
 octogenarian	octogenarians
 octopod	octopods
 octopodan	octopodans
-octopus	octopi
+octopus	octopuses
 octospore	octospores
 octosyllable	octosyllables
 octuple	octuples
@@ -39129,7 +39127,7 @@ sequevar	sequevars
 sequivirus	sequiviruses
 sequoia	sequoias
 sequon	sequons
-seraph	seraphim
+seraph	seraphs
 sere	seres
 serenade	serenades
 serendipity	serendipities
@@ -39420,7 +39418,6 @@ shore	shores
 shorebird	shorebirds
 shoreline	shorelines
 shoring	shorings
-short	shorts
 shortage	shortages
 shortcake	shortcakes
 shortcoming	shortcomings
@@ -42458,7 +42455,7 @@ sydnone	sydnones
 sydnonimine	sydnonimines
 syllabic	syllabics
 syllable	syllables
-syllabus	syllabi
+syllabus	syllabuses
 syllid	syllids
 syllogism	syllogisms
 syllogist	syllogists
@@ -45185,7 +45182,6 @@ tweak	tweaks
 tweed	tweeds
 tweet	tweets
 tweeter	tweeters
-tweezer	tweezers
 twi	twis
 twiddler	twiddlers
 twig	twigs

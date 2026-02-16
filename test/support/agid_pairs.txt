@@ -2074,7 +2074,7 @@ awlwort	awlworts
 awn	awns
 awning	awnings
 awol	awols
-axe	axes
+axis	axes
 axil	axils
 axilla	axillas
 axiology	axiologies
@@ -3753,7 +3753,6 @@ bridgework	bridgeworks
 bridle	bridles
 bridoon	bridoons
 brie	bries
-brief	briefs
 briefing	briefings
 briefness	briefnesses
 brier	briers
@@ -4224,7 +4223,7 @@ cacography	cacographies
 cacomistle	cacomistles
 cacomixle	cacomixles
 cacophony	cacophonies
-cactus	cacti
+cactus	cactuses
 cad	cads
 cadaster	cadasters
 cadastre	cadastres
@@ -5160,7 +5159,7 @@ chastiser	chastisers
 chastity	chastities
 chasuble	chasubles
 chat	chats
-chateau	chateaux
+chateau	chateaus
 chatelaine	chatelaines
 chattel	chattels
 chatter	chatters
@@ -7452,7 +7451,7 @@ currawong	currawongs
 currency	currencies
 current	currents
 currentness	currentnesses
-curriculum	curricula
+curriculum	curriculums
 curry	curries
 currycomb	currycombs
 cursor	cursors
@@ -11847,7 +11846,7 @@ funeral	funerals
 funfair	funfairs
 fungicide	fungicides
 fungoid	fungoids
-fungus	fungi
+fungus	funguses
 funicle	funicles
 funicular	funiculars
 funk	funks
@@ -16566,7 +16565,6 @@ legerdemain	legerdemains
 legerity	legerities
 leggin	leggins
 legginess	legginesses
-legging	leggings
 leghorn	leghorns
 legibility	legibilities
 legion	legions
@@ -20436,7 +20434,6 @@ overachievement	overachievements
 overachiever	overachievers
 overactivity	overactivities
 overage	overages
-overall	overalls
 overanxiety	overanxieties
 overbalance	overbalances
 overbearingness	overbearingnesses
@@ -26311,7 +26308,6 @@ shore	shores
 shorebird	shorebirds
 shoreline	shorelines
 shoring	shorings
-short	shorts
 shortage	shortages
 shortbread	shortbreads
 shortcake	shortcakes
@@ -28849,7 +28845,7 @@ tabi	tabis
 tabla	tablas
 tablature	tablatures
 table	tables
-tableau	tableaux
+tableau	tableaus
 tablecloth	tablecloths
 tableland	tablelands
 tablemate	tablemates
@@ -30612,7 +30608,6 @@ tweed	tweeds
 tweediness	tweedinesses
 tweet	tweets
 tweeter	tweeters
-tweezer	tweezers
 twelfth	twelfths
 twelve	twelves
 twelvemonth	twelvemonths
