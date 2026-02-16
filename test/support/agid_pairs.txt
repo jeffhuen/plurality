@@ -25879,7 +25879,6 @@ senna	sennas
 senor	senors
 senora	senoras
 senorita	senoritas
-sens	senses
 sensation	sensations
 sensationalism	sensationalisms
 sensationalist	sensationalists

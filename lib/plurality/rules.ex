@@ -608,13 +608,15 @@ defmodule Plurality.Rules do
       <<_::binary-size(plen - 1), last_p>> = prefix
 
       case last_p do
-        # -yses → -ysis (analyses→analysis)
+        # -yses → -ysis (analyses→analysis, paralyses→paralysis)
         ?y -> prefix <> "sis"
-        # generic -ses → -s
-        _ -> prefix <> "s"
+        # prefix ends in s → root ends in -s (boss→bosses, class→classes)
+        ?s -> prefix <> "s"
+        # all other -ses → root ends in -se (case→cases, horse→horses)
+        _ -> prefix <> "se"
       end
     else
-      prefix <> "s"
+      prefix <> "se"
     end
   end
 

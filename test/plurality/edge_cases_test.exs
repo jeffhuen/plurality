@@ -112,9 +112,26 @@ defmodule Plurality.EdgeCasesTest do
       assert Plurality.pluralize("Person") == "People"
     end
 
+    test "title case irregular with stem change" do
+      assert Plurality.pluralize("Goose") == "Geese"
+      assert Plurality.pluralize("Mouse") == "Mice"
+      assert Plurality.pluralize("Tooth") == "Teeth"
+      assert Plurality.pluralize("Foot") == "Feet"
+      assert Plurality.pluralize("Man") == "Men"
+      assert Plurality.pluralize("Woman") == "Women"
+    end
+
     test "all caps irregular" do
       assert Plurality.pluralize("CHILD") == "CHILDREN"
       assert Plurality.pluralize("PERSON") == "PEOPLE"
+    end
+
+    test "all caps irregular with stem change" do
+      assert Plurality.pluralize("GOOSE") == "GEESE"
+      assert Plurality.pluralize("MOUSE") == "MICE"
+      assert Plurality.pluralize("TOOTH") == "TEETH"
+      assert Plurality.pluralize("FOOT") == "FEET"
+      assert Plurality.pluralize("MAN") == "MEN"
     end
 
     test "singularize preserves case" do
@@ -122,6 +139,15 @@ defmodule Plurality.EdgeCasesTest do
       assert Plurality.singularize("Children") == "Child"
       assert Plurality.singularize("LEAVES") == "LEAF"
       assert Plurality.singularize("Leaves") == "Leaf"
+    end
+
+    test "singularize preserves title case with stem change" do
+      assert Plurality.singularize("Geese") == "Goose"
+      assert Plurality.singularize("Mice") == "Mouse"
+      assert Plurality.singularize("Teeth") == "Tooth"
+      assert Plurality.singularize("Feet") == "Foot"
+      assert Plurality.singularize("Men") == "Man"
+      assert Plurality.singularize("Women") == "Woman"
     end
   end
 
@@ -280,6 +306,105 @@ defmodule Plurality.EdgeCasesTest do
     test "briefs stays unchanged" do
       assert Plurality.pluralize("briefs") == "briefs"
       assert Plurality.singularize("briefs") == "briefs"
+    end
+  end
+
+  describe "fix #16: PascalCase compound words preserve casing" do
+    test "singularize preserves PascalCase" do
+      assert Plurality.singularize("ResourceAttachments") == "ResourceAttachment"
+      assert Plurality.singularize("WorkingDays") == "WorkingDay"
+      assert Plurality.singularize("CustomDays") == "CustomDay"
+    end
+
+    test "pluralize preserves PascalCase" do
+      assert Plurality.pluralize("ResourceAttachment") == "ResourceAttachments"
+      assert Plurality.pluralize("WorkingDay") == "WorkingDays"
+    end
+
+    test "pluralize with check preserves PascalCase" do
+      assert Plurality.pluralize("ResourceAttachment", check: true) == "ResourceAttachments"
+    end
+
+    test "PascalCase with irregular last segment" do
+      assert Plurality.singularize("SalesPersonPeople") == "SalesPersonPerson"
+      assert Plurality.pluralize("SalesPersonChild") == "SalesPersonChildren"
+    end
+
+    test "all-caps compound words" do
+      assert Plurality.pluralize("RESOURCEATTACHMENT") == "RESOURCEATTACHMENTS"
+      assert Plurality.singularize("RESOURCEATTACHMENTS") == "RESOURCEATTACHMENT"
+    end
+
+    test "camelCase compound words" do
+      assert Plurality.pluralize("resourceAttachment") == "resourceAttachments"
+      assert Plurality.singularize("resourceAttachments") == "resourceAttachment"
+    end
+  end
+
+  describe "fix #17: -se root words singularize correctly" do
+    test "singularize common -se words" do
+      pairs = [
+        {"cases", "case"},
+        {"phases", "phase"},
+        {"doses", "dose"},
+        {"roses", "rose"},
+        {"poses", "pose"},
+        {"noses", "nose"},
+        {"purses", "purse"},
+        {"courses", "course"},
+        {"horses", "horse"},
+        {"nurses", "nurse"},
+        {"verses", "verse"},
+        {"curses", "curse"},
+        {"pulses", "pulse"},
+        {"rinses", "rinse"},
+        {"pauses", "pause"},
+        {"causes", "cause"},
+        {"clauses", "clause"},
+        {"leases", "lease"},
+        {"eases", "ease"},
+        {"creases", "crease"},
+        {"responses", "response"},
+        {"expenses", "expense"},
+        {"senses", "sense"},
+        {"reverses", "reverse"},
+        {"purposes", "purpose"},
+        {"releases", "release"},
+        {"licenses", "license"},
+        {"increases", "increase"},
+        {"universes", "universe"}
+      ]
+
+      for {plural, singular} <- pairs do
+        assert Plurality.singularize(plural) == singular,
+               "singularize(#{plural}) should be #{singular}, got #{Plurality.singularize(plural)}"
+      end
+    end
+
+    test "existing -ses special cases still work" do
+      # -sses -> -ss
+      assert Plurality.singularize("bosses") == "boss"
+      assert Plurality.singularize("classes") == "class"
+      assert Plurality.singularize("masses") == "mass"
+
+      # -ouses -> -ouse
+      assert Plurality.singularize("houses") == "house"
+      assert Plurality.singularize("mouses") == "mouse"
+
+      # -yses -> -ysis
+      assert Plurality.singularize("analyses") == "analysis"
+      assert Plurality.singularize("paralyses") == "paralysis"
+
+      # -s roots + -es (gas, bus, etc.)
+      assert Plurality.singularize("gases") == "gas"
+      assert Plurality.singularize("buses") == "bus"
+    end
+
+    test "round-trip pluralize -> singularize for -se words" do
+      for word <- ~w[case phase dose rose nose purse course horse nurse verse] do
+        assert word |> Plurality.pluralize() |> Plurality.singularize() == word,
+               "round-trip failed for #{word}"
+      end
     end
   end
 

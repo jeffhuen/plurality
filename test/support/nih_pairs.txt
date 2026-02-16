@@ -12690,7 +12690,6 @@ dorsiflexion	dorsiflexions
 dorsiflexor	dorsiflexors
 dorsomedian	dorsomedians
 dorsopathy	dorsopathies
-dos	doses
 dosage	dosages
 doser	dosers
 dosimetrist	dosimetrists
@@ -37563,7 +37562,6 @@ reverence	reverences
 reverend	reverends
 reverie	reveries
 reveromycin	reveromycins
-revers	reverses
 reversal	reversals
 reverser	reversers
 reversibility	reversibilities

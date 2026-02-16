@@ -431,8 +431,9 @@ defmodule Plurality.Engine do
 
   defp downcase(word), do: String.downcase(word)
 
-  # Fast style application: skip Style.match_style when word is already lowercase
-  # (word == downcased means no case transformation needed).
+  # Applies the casing pattern of `word` onto the inflected `result`.
+  # Short-circuits when `word` is already lowercase (the common case),
+  # then delegates to Style.match_style/2 for PascalCase/Title/UPPER.
   @spec apply_style(String.t(), String.t(), String.t()) :: String.t()
   defp apply_style(word, downcased, result) when word == downcased, do: result
   defp apply_style(word, _downcased, result), do: Style.match_style(word, result)

@@ -3,6 +3,22 @@
 The format is based on [Common Changelog](https://common-changelog.org/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.3] - 2026-02-16
+
+### Changed
+
+- Rewrite `Plurality.Style` internals to use prefix slicing instead of
+  per-character iteration, eliminating intermediate allocations
+
+### Fixed
+
+- Preserve casing on PascalCase and camelCase compound words
+  (`pluralize("ResourceAttachment")` now returns `"ResourceAttachments"`
+  instead of `"resourceattachments"`)
+- Singularize `-se` root words correctly (`singularize("cases")` now returns
+  `"case"` instead of `"cas"`, along with 82 other common words like `horse`,
+  `nurse`, `purse`, `course`, `verse`, `pulse`, `sense`, `response`)
+
 ## [0.2.2] - 2026-02-15
 
 ### Changed

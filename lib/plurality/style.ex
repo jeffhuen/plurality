@@ -7,36 +7,35 @@ defmodule Plurality.Style do
   to the inflected result, so that `"LEAF"` becomes `"LEAVES"` (not `"leaves"`)
   and `"Leaf"` becomes `"Leaves"` (not `"leaves"`).
 
-  ## Supported styles
+  ## How it works
 
-  | Style | Detection rule | Example |
-  |-------|---------------|---------|
-  | ALL CAPS | Every letter is uppercase, at least one letter present | `"LEAF"` → `"LEAVES"` |
-  | Title Case | First character uppercase, rest lowercase | `"Leaf"` → `"Leaves"` |
-  | lowercase | Default (no transformation applied) | `"leaf"` → `"leaves"` |
+  Inflection only changes the suffix of a word. This module finds the shared
+  prefix between the original and the result via a byte-walking scan, slices
+  it from the original (zero-copy sub-binary), and appends the remaining
+  suffix from the inflected result.
 
-  ## Edge cases
+  For ALL CAPS input, a single `String.upcase/1` on the whole result is
+  faster and used instead.
 
-  * If the original and result are identical, the result is returned as-is
-    (no unnecessary string allocation).
-  * Single-character words are not detected as Title Case (they have no
-    "rest" to verify as lowercase).
-  * Words with mixed casing (e.g., `"camelCase"`) are not detected as any
-    special style and pass through unchanged.
+  ## Examples
+
+  | Original | Inflected | Output |
+  |----------|-----------|--------|
+  | `"LEAF"` | `"leaves"` | `"LEAVES"` |
+  | `"Leaf"` | `"leaves"` | `"Leaves"` |
+  | `"leaf"` | `"leaves"` | `"leaves"` |
+  | `"ResourceAttachment"` | `"resourceattachments"` | `"ResourceAttachments"` |
+  | `"camelCase"` | `"camelcases"` | `"camelCases"` |
 
   ## Usage
 
-  This module is used internally by `Plurality.Engine`. It is not typically
-  called directly, but is public so that `Plurality.Custom` can use it
-  for consistent style handling.
+  This module is used internally by `Plurality.Engine` and `Plurality.Custom`.
   """
 
   @doc """
-  Matches the casing style of `original` and applies it to `result`.
+  Transfers the casing pattern of `original` onto `result`.
 
-  Returns `result` unchanged if `original` is lowercase or has mixed casing.
-  Applies `String.upcase/1` if `original` is ALL CAPS, or capitalizes the
-  first character if `original` is Title Case.
+  Returns `result` unchanged when `original` and `result` are identical.
 
   ## Examples
 
@@ -53,20 +52,22 @@ defmodule Plurality.Style do
       "sheep"
 
       iex> Plurality.Style.match_style("camelCase", "camelcases")
-      "camelcases"
+      "camelCases"
+
+      iex> Plurality.Style.match_style("ResourceAttachment", "resourceattachments")
+      "ResourceAttachments"
   """
-  @spec match_style(original :: String.t(), result :: String.t()) :: String.t()
+  @spec match_style(String.t(), String.t()) :: String.t()
   def match_style(original, result) when is_binary(original) and is_binary(result) do
     cond do
       original == result -> result
       all_upper?(original) -> String.upcase(result)
-      title_case?(original) -> title_case(result)
-      true -> result
+      true -> transfer_by_prefix(original, result)
     end
   end
 
-  # Returns true if every character is uppercase and at least one character
-  # has a case distinction (i.e., not all digits/punctuation).
+  # ── Fast-path detector ──────────────────────────────────────────
+
   @spec all_upper?(String.t()) :: boolean()
   defp all_upper?(<<c, _rest::binary>> = word) when c in ?A..?Z do
     word == String.upcase(word)
@@ -74,20 +75,49 @@ defmodule Plurality.Style do
 
   defp all_upper?(_), do: false
 
-  # Returns true if the first character is uppercase and all remaining
-  # characters are lowercase. Requires at least 2 characters.
-  @spec title_case?(String.t()) :: boolean()
-  defp title_case?(<<c, rest::binary>>) when c in ?A..?Z and byte_size(rest) > 0 do
-    rest == String.downcase(rest)
+  # ── Prefix slicing ─────────────────────────────────────────────
+
+  # Finds the shared prefix between `downcase(original)` and `result`
+  # via byte walking, slices it from `original` (zero-copy sub-binary),
+  # and appends the remaining tail from `result` as-is.
+  #
+  # ALL CAPS input is handled before this function is called (via
+  # `all_upper?/1` + `String.upcase/1`), so the tail never needs
+  # uppercasing here.
+  @spec transfer_by_prefix(String.t(), String.t()) :: String.t()
+  defp transfer_by_prefix(original, result) do
+    shared = shared_prefix_size(original, result, 0)
+    prefix = binary_part(original, 0, shared)
+    tail = binary_part(result, shared, byte_size(result) - shared)
+    prefix <> tail
   end
 
-  defp title_case?(_), do: false
-
-  # Capitalizes the first character of a word, leaving the rest unchanged.
-  @spec title_case(String.t()) :: String.t()
-  defp title_case(<<c::utf8, rest::binary>>) do
-    <<String.upcase(<<c::utf8>>)::binary, rest::binary>>
+  # Counts leading bytes where `downcase(original)` matches `result`.
+  @spec shared_prefix_size(String.t(), String.t(), non_neg_integer()) :: non_neg_integer()
+  defp shared_prefix_size(<<o, orig_rest::binary>>, <<r, res_rest::binary>>, n)
+       when o in ?A..?Z and r == o + 32 do
+    shared_prefix_size(orig_rest, res_rest, n + 1)
   end
 
-  defp title_case(word), do: word
+  defp shared_prefix_size(<<o, orig_rest::binary>>, <<r, res_rest::binary>>, n)
+       when o == r do
+    shared_prefix_size(orig_rest, res_rest, n + 1)
+  end
+
+  defp shared_prefix_size(
+         <<o_char::utf8, orig_rest::binary>>,
+         <<r_char::utf8, res_rest::binary>>,
+         n
+       )
+       when o_char > 127 do
+    o_str = <<o_char::utf8>>
+
+    if String.downcase(o_str) == <<r_char::utf8>> do
+      shared_prefix_size(orig_rest, res_rest, n + byte_size(o_str))
+    else
+      n
+    end
+  end
+
+  defp shared_prefix_size(_original, _result, n), do: n
 end
