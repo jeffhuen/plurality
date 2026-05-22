@@ -94,21 +94,17 @@ Plurality.singularize("antennas")   #=> "antenna"
 This works because the reverse lookup map is enriched at compile time with
 both modern and classical plural forms pointing to the same singular.
 
-## App-wide config
+## Choosing an app default
 
-Enable classical mode globally so all calls use it by default:
-
-```elixir
-# config/config.exs
-config :plurality, classical: true
-```
-
-Per-call options always override the app-wide setting:
+Plurality does not read application configuration. Keep defaults explicit at
+the call site, or put the choice behind an application-owned wrapper:
 
 ```elixir
-# With classical: true in config...
-Plurality.pluralize("aquarium")                   #=> "aquaria"    (from config)
-Plurality.pluralize("aquarium", classical: false)  #=> "aquariums"  (per-call override)
+defmodule MyApp.Inflection do
+  def pluralize(word, opts \\ []) do
+    Plurality.pluralize(word, Keyword.put_new(opts, :classical, true))
+  end
+end
 ```
 
 ## With inflect/3

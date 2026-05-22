@@ -82,19 +82,21 @@ defmodule Plurality.Engine do
   # Data Loading — compile-time
   # ══════════════════════════════════════════════════════════════════
 
-  @priv_dir :code.priv_dir(:plurality) |> to_string()
+  @classical_overrides_path Application.app_dir(:plurality, "priv/data/classical_overrides.tsv")
+  @irregulars_path Application.app_dir(:plurality, "priv/data/irregulars.tsv")
+  @uncountables_path Application.app_dir(:plurality, "priv/data/uncountables.txt")
 
-  @external_resource Path.expand("../../priv/data/classical_overrides.tsv", __DIR__)
-  @external_resource Path.expand("../../priv/data/irregulars.tsv", __DIR__)
-  @external_resource Path.expand("../../priv/data/uncountables.txt", __DIR__)
+  @source_data_dir Path.join([__DIR__, "..", "..", "priv", "data"])
+  @external_resource Path.join(@source_data_dir, "classical_overrides.tsv")
+  @external_resource Path.join(@source_data_dir, "irregulars.tsv")
+  @external_resource Path.join(@source_data_dir, "uncountables.txt")
 
   # Load classical overrides from priv/data/classical_overrides.tsv
   # Format: singular<TAB>modern_plural<TAB>classical_plural
   # Only contains words where the default is modern but a classical form exists.
   # ~69 entries curated from NIH SPECIALIST Lexicon and verified against
   # standard references.
-  @classical_overrides @priv_dir
-                       |> Path.join("data/classical_overrides.tsv")
+  @classical_overrides @classical_overrides_path
                        |> File.read!()
                        |> String.split("\n", trim: true)
                        |> Enum.map(fn line ->
@@ -112,8 +114,7 @@ defmodule Plurality.Engine do
   # Format: singular<TAB>plural, one pair per line, sorted alphabetically.
   # This file is the pre-merged result of all data sources with proper
   # precedence already applied. ~1,110 pairs.
-  @irregulars @priv_dir
-              |> Path.join("data/irregulars.tsv")
+  @irregulars @irregulars_path
               |> File.read!()
               |> String.split("\n", trim: true)
               |> Enum.map(fn line ->
@@ -126,8 +127,7 @@ defmodule Plurality.Engine do
 
   # Load pre-merged uncountable words from priv/data/uncountables.txt
   # One word per line, sorted alphabetically. ~1,022 words.
-  @raw_uncountables @priv_dir
-                    |> Path.join("data/uncountables.txt")
+  @raw_uncountables @uncountables_path
                     |> File.read!()
                     |> String.split("\n", trim: true)
                     |> Enum.map(&String.trim/1)
@@ -438,40 +438,14 @@ defmodule Plurality.Engine do
   defp apply_style(word, downcased, result) when word == downcased, do: result
   defp apply_style(word, _downcased, result), do: Style.match_style(word, result)
 
-  # Resolves the classical? flag from per-call opts, falling back to app config.
-  # Uses :persistent_term for near-zero-cost reads on the hot path.
+  # Resolves the classical? flag from per-call opts.
   @spec classical?(keyword()) :: boolean()
-  defp classical?([]), do: classical_default()
+  defp classical?([]), do: false
   defp classical?(classical: val) when is_boolean(val), do: val
-  defp classical?(check: _), do: classical_default()
+  defp classical?(check: _), do: false
 
   defp classical?(opts) do
-    case Keyword.get(opts, :classical) do
-      nil -> classical_default()
-      val -> val
-    end
-  end
-
-  @spec classical_default() :: boolean()
-  defp classical_default do
-    case :persistent_term.get({__MODULE__, :classical}, :unset) do
-      :unset ->
-        val = Application.get_env(:plurality, :classical, false)
-        :persistent_term.put({__MODULE__, :classical}, val)
-        val
-
-      val ->
-        val
-    end
-  end
-
-  @doc false
-  @spec reset_classical_cache() :: :ok
-  def reset_classical_cache do
-    :persistent_term.erase({__MODULE__, :classical})
-    :ok
-  rescue
-    ArgumentError -> :ok
+    Keyword.get(opts, :classical, false)
   end
 
   @spec uncountable?(String.t()) :: boolean()

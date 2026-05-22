@@ -370,22 +370,21 @@ handled through the reverse map of known words.
 | `dev/research/agid/parse_agid.exs` | AGID parser script | — |
 | `dev/research/nih/parse_nih.exs` | NIH parser script | — |
 
-## App-wide configuration
+## Explicit configuration
 
 ```elixir
-# Use modern English (default)
-config :plurality, classical: false
-
-# Use classical Latin/Greek forms globally
-config :plurality, classical: true
-
-# Delegate to a custom module for domain overrides
-config :plurality, custom_module: MyApp.Inflection
+Plurality.pluralize("aquarium")                   #=> "aquariums"
+Plurality.pluralize("aquarium", classical: true)  #=> "aquaria"
+MyApp.Inflection.pluralize("regex")               #=> "regexen"
 ```
 
-Per-call options always override app-wide config:
+Plurality avoids library-owned application configuration. If an application
+wants a project default, put that decision in application code:
 
 ```elixir
-# Even with classical: true in config, this returns modern:
-Plurality.pluralize("aquarium", classical: false)  #=> "aquariums"
+defmodule MyApp.Nouns do
+  def pluralize(word, opts \\ []) do
+    Plurality.pluralize(word, Keyword.put_new(opts, :classical, true))
+  end
+end
 ```

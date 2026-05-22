@@ -66,7 +66,7 @@ Plurality.singularize("aquaria")    # => "aquarium"
 ```
 
 See the [Classical Mode guide](guides/classical-mode.md) for full details on
-which forms are affected, app-wide config, and how default decisions were made.
+which forms are affected and how default decisions were made.
 
 ### Domain customization
 
@@ -84,11 +84,9 @@ MyApp.Inflection.pluralize("kubernetes")  # => "kubernetes"
 MyApp.Inflection.pluralize("leaf")        # => "leaves"  (falls through)
 ```
 
-Or delegate globally so all `Plurality.*` calls use your overrides:
-
-```elixir
-config :plurality, custom_module: MyApp.Inflection
-```
+Plurality intentionally avoids application configuration. Call your custom
+module directly, or wrap it in your own app module if you want a single project
+entry point.
 
 See the [Customization guide](guides/customization.md) for full documentation.
 

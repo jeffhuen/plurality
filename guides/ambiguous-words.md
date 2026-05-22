@@ -128,15 +128,13 @@ defmodule MyApp.Inflection do
 end
 ```
 
-## App-wide overrides
+## Applying overrides
 
-If you want your overrides to apply everywhere (including third-party
-libraries that call `Plurality` directly), set the custom module in your
-application config:
+Call the custom module from code that needs the domain-specific behavior:
 
 ```elixir
-# config/config.exs
-config :plurality, custom_module: MyApp.Inflection
+MyApp.Inflection.pluralize("cowfish")  #=> "cowfish"
+MyApp.Inflection.pluralize("formula")  #=> "formulae"
 ```
 
 See the [Customization guide](customization.md) for full details.

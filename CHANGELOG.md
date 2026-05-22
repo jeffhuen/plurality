@@ -3,6 +3,14 @@
 The format is based on [Common Changelog](https://common-changelog.org/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-05-22
+
+### Removed
+
+- **Breaking:** remove library-owned application configuration; `classical`
+  mode is now selected only via per-call `classical: true`, and custom
+  inflection modules are called directly.
+
 ## [0.2.3] - 2026-02-16
 
 ### Changed
@@ -61,14 +69,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add classical mode: `classical: true` option for Latin/Greek plural forms
-  (69 overrides, 4 suffix rules, app-wide config support)
+  (69 overrides, 4 suffix rules)
 - Add `inflect/3` opts passthrough (e.g., `classical: true`)
 - Add compound noun handling: multi-word nouns split on last space, last word
   inflected; known multi-word irregulars take priority
 - Add compound irregular suffix rules: `-child` → `-children`,
   `-tooth` → `-teeth`, `-foot` → `-feet`, `-mouse` → `-mice`,
   `-person` → `-people`, `-fish` unchanged
-- Add app-wide config delegation via `config :plurality, custom_module:`
 - Add AGID corpus test suite (32,625 noun pairs verified in both directions)
 - Add NIH SPECIALIST Lexicon test suite (47,566 noun pairs verified in both
   directions)

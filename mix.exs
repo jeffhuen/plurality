@@ -1,7 +1,7 @@
 defmodule Plurality.MixProject do
   use Mix.Project
 
-  @version "0.2.3"
+  @version "0.3.0"
   @source_url "https://github.com/jeffhuen/plurality"
 
   def project do
@@ -33,6 +33,7 @@ defmodule Plurality.MixProject do
       {:benchee, "~> 1.0", only: :dev, runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ex_slop, "~> 0.4.1", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.34", only: :dev, runtime: false}
     ]
   end

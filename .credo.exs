@@ -3,6 +3,7 @@
     %{
       name: "default",
       strict: true,
+      plugins: [{ExSlop, []}],
       checks: %{
         extra: [
           # Dispatch functions use large case statements by design (last-byte

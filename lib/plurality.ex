@@ -90,23 +90,15 @@ defmodule Plurality do
       Plurality.singularize("aquariums")  #=> "aquarium"
       Plurality.singularize("aquaria")    #=> "aquarium"
 
-  ## App-wide config
+  ## Explicit configuration
 
-  To make all `Plurality.*` functions automatically delegate to your custom
-  module, set it in your application config:
+  Plurality does not read application configuration. Pass options at the call
+  site and call custom inflection modules directly:
 
-      # config/config.exs
-      config :plurality, custom_module: MyApp.Inflection
+      Plurality.pluralize("aquarium", classical: true) #=> "aquaria"
+      MyApp.Inflection.pluralize("regex")              #=> "regexen"
 
-  With this config, any code calling `Plurality.pluralize/2` — including
-  third-party libraries — will use your custom overrides transparently.
-
-  To enable classical mode globally:
-
-      # config/config.exs
-      config :plurality, classical: true
-
-  Per-call `classical: true/false` overrides the app-wide setting.
+  This keeps library behavior local to each caller and avoids global state.
 
   ## Ash integration
 
@@ -152,9 +144,7 @@ defmodule Plurality do
 
   * `:classical` — when `true`, uses classical Latin/Greek plural forms
     instead of modern English forms (e.g., `"aquarium"` → `"aquaria"`
-    instead of `"aquariums"`). When `false` or omitted, falls back to the
-    app-wide config `config :plurality, classical: true`, which defaults
-    to `false`.
+    instead of `"aquariums"`). Defaults to `false`.
   """
   @type pluralize_opts :: [check: boolean(), classical: boolean()]
 
@@ -164,8 +154,8 @@ defmodule Plurality do
   Returns the word unchanged if it is uncountable (e.g., `"sheep"`, `"software"`).
   Preserves the casing style of the input (ALL CAPS, Title Case, or lowercase).
 
-  If a custom module is configured via `config :plurality, custom_module: MyApp.Inflection`,
-  this function delegates to that module's `pluralize/2` instead.
+  For custom domain rules, define a `Plurality.Custom` module and call it
+  directly.
 
   ## Options
 
@@ -175,8 +165,7 @@ defmodule Plurality do
       `"childrens"`). Defaults to `false`.
 
     * `:classical` (`boolean()`) - When `true`, uses classical Latin/Greek
-      plural forms instead of modern English forms. When omitted, falls back
-      to `config :plurality, classical: true` (default `false`).
+      plural forms instead of modern English forms. Defaults to `false`.
 
   ## Resolution order
 
@@ -236,10 +225,7 @@ defmodule Plurality do
   """
   @spec pluralize(word :: String.t(), opts :: pluralize_opts()) :: String.t()
   def pluralize(word, opts \\ []) do
-    case custom_module() do
-      nil -> Plurality.Engine.pluralize(word, opts)
-      mod -> mod.pluralize(word, opts)
-    end
+    Plurality.Engine.pluralize(word, opts)
   end
 
   @doc """
@@ -247,8 +233,8 @@ defmodule Plurality do
 
   Returns the word unchanged if it is uncountable. Preserves casing style.
 
-  If a custom module is configured via `config :plurality, custom_module: MyApp.Inflection`,
-  this function delegates to that module's `singularize/1` instead.
+  For custom domain rules, define a `Plurality.Custom` module and call it
+  directly.
 
   For words that appear in both the uncountables set and the irregular plurals
   map (e.g., `"data"`, `"graffiti"`), the irregular reverse lookup takes
@@ -309,10 +295,7 @@ defmodule Plurality do
   """
   @spec singularize(word :: String.t()) :: String.t()
   def singularize(word) do
-    case custom_module() do
-      nil -> Plurality.Engine.singularize(word)
-      mod -> mod.singularize(word)
-    end
+    Plurality.Engine.singularize(word)
   end
 
   @doc """
@@ -321,7 +304,8 @@ defmodule Plurality do
   Uncountable words like `"sheep"` and `"software"` return `true` for both
   `plural?/1` and `singular?/1`, since they are valid in either context.
 
-  If a custom module is configured, delegates to that module's `plural?/1`.
+  For custom domain rules, define a `Plurality.Custom` module and call it
+  directly.
 
   ## Detection strategy
 
@@ -352,10 +336,7 @@ defmodule Plurality do
   """
   @spec plural?(word :: String.t()) :: boolean()
   def plural?(word) do
-    case custom_module() do
-      nil -> Plurality.Engine.plural?(word)
-      mod -> mod.plural?(word)
-    end
+    Plurality.Engine.plural?(word)
   end
 
   @doc """
@@ -363,7 +344,8 @@ defmodule Plurality do
 
   Uncountable words return `true` for both `plural?/1` and `singular?/1`.
 
-  If a custom module is configured, delegates to that module's `singular?/1`.
+  For custom domain rules, define a `Plurality.Custom` module and call it
+  directly.
 
   ## Detection strategy
 
@@ -392,10 +374,7 @@ defmodule Plurality do
   """
   @spec singular?(word :: String.t()) :: boolean()
   def singular?(word) do
-    case custom_module() do
-      nil -> Plurality.Engine.singular?(word)
-      mod -> mod.singular?(word)
-    end
+    Plurality.Engine.singular?(word)
   end
 
   @doc """
@@ -405,7 +384,8 @@ defmodule Plurality do
   for all other values (including `0`, negative numbers, and numbers greater
   than `1`).
 
-  If a custom module is configured, delegates to that module's `inflect/3`.
+  For custom domain rules, define a `Plurality.Custom` module and call it
+  directly.
 
   This follows standard English convention where zero and plural counts
   use the plural form: "0 items", "2 items", but "1 item".
@@ -446,15 +426,6 @@ defmodule Plurality do
   """
   @spec inflect(word :: String.t(), count :: integer(), opts :: pluralize_opts()) :: String.t()
   def inflect(word, count, opts \\ []) do
-    case custom_module() do
-      nil -> Plurality.Engine.inflect(word, count, opts)
-      mod -> mod.inflect(word, count, opts)
-    end
-  end
-
-  # Returns the configured custom module, or nil if not set.
-  @spec custom_module() :: module() | nil
-  defp custom_module do
-    Application.get_env(:plurality, :custom_module)
+    Plurality.Engine.inflect(word, count, opts)
   end
 end

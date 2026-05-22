@@ -343,35 +343,24 @@ defmodule Plurality.ClassicalTest do
     end
   end
 
-  # ══════════════════════════════════════════════════════════════════
-  # App-wide classical config
-  # ══════════════════════════════════════════════════════════════════
-
-  describe "app-wide classical config" do
+  describe "explicit classical option" do
     setup do
-      on_exit(fn ->
-        Application.delete_env(:plurality, :classical)
-        Plurality.Engine.reset_classical_cache()
-      end)
+      Application.delete_env(:plurality, :classical)
+      on_exit(fn -> Application.delete_env(:plurality, :classical) end)
     end
 
-    test "config :plurality, classical: true changes default" do
+    test "application config does not change the default" do
       Application.put_env(:plurality, :classical, true)
-      Plurality.Engine.reset_classical_cache()
-      assert Plurality.pluralize("aquarium") == "aquaria"
-      assert Plurality.pluralize("formula") == "formulae"
+
+      assert Plurality.pluralize("aquarium") == "aquariums"
+      assert Plurality.pluralize("formula") == "formulas"
     end
 
-    test "per-call classical: false overrides app config" do
+    test "per-call classical: true selects classical forms" do
       Application.put_env(:plurality, :classical, true)
-      Plurality.Engine.reset_classical_cache()
-      assert Plurality.pluralize("aquarium", classical: false) == "aquariums"
-    end
 
-    test "per-call classical: true overrides app config false" do
-      Application.put_env(:plurality, :classical, false)
-      Plurality.Engine.reset_classical_cache()
       assert Plurality.pluralize("aquarium", classical: true) == "aquaria"
+      assert Plurality.pluralize("formula", classical: true) == "formulae"
     end
   end
 

@@ -49,7 +49,6 @@ exit early before reaching the rule engine.
 - **Inline space check**: compound noun detection uses a byte-by-byte scan
   that bails on the first byte for single-word inputs, avoiding the overhead
   of `:binary.match` setup
-- **Classical config**: cached in `:persistent_term` after first read for near-zero cost
 - **Binary dispatch**: suffix rules extract the last byte and dispatch through a
   compiler-generated jump table — no iteration, no regex
 

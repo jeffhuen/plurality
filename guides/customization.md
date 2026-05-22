@@ -79,25 +79,27 @@ uncountables: [
 ]
 ```
 
-## App-wide delegation
+## Application integration
 
-By default, you call your custom module directly. But if you want *all*
-`Plurality.*` calls — including from third-party libraries — to use your
-overrides, set it in application config:
+Call custom modules directly from the code that needs domain-specific rules:
 
 ```elixir
-# config/config.exs
-config :plurality, custom_module: MyApp.Inflection
+MyApp.Inflection.pluralize("regex")       #=> "regexen"
+MyApp.Inflection.pluralize("leaf")        #=> "leaves"
 ```
 
-With this config:
+If your application wants a single entry point, wrap the custom module in your
+own application code:
 
 ```elixir
-Plurality.pluralize("regex")       #=> "regexen"  (delegated to MyApp.Inflection)
-Plurality.pluralize("leaf")        #=> "leaves"   (falls through to engine)
+defmodule MyApp.Nouns do
+  def pluralize(word, opts \\ []), do: MyApp.Inflection.pluralize(word, opts)
+  def singularize(word), do: MyApp.Inflection.singularize(word)
+end
 ```
 
-Without the config, `Plurality.pluralize/2` uses the built-in engine directly.
+Plurality itself avoids application configuration so different callers can make
+different choices without shared global state.
 
 ## Classical mode with custom modules
 
@@ -128,10 +130,10 @@ MyApp.Inflection.inflect("aquarium", 2, classical: true)  #=> "aquaria"
 
 ## Design rationale
 
-Custom modules are called directly (or via app config) rather than being
-registered in a global registry. This is intentional:
+Custom modules are called directly rather than being registered in a global
+registry. This is intentional:
 
-- **Explicit** — no hidden delegation unless you configure it
+- **Explicit** — no hidden delegation or library-owned application config
 - **Composable** — different parts of your app can use different custom modules
 - **Zero overhead** — compiled into module bytecode, no ETS or runtime config reads
 - **Compile-time verified** — typos in irregular pairs surface at build time
