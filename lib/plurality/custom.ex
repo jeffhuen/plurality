@@ -66,7 +66,7 @@ defmodule Plurality.Custom do
   Custom modules are called directly rather than being registered globally.
   This is intentional:
 
-  * **Explicit** — no hidden app-wide config or implicit delegation
+  * **Explicit** — no hidden delegation or library-owned configuration
   * **Composable** — different parts of your app can use different custom
     modules
   * **Zero overhead** — no ETS lookups or runtime configuration reads

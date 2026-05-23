@@ -9,7 +9,7 @@ Add `plurality` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:plurality, "~> 0.2.3"}
+    {:plurality, "~> 0.3.0"}
   ]
 end
 ```
